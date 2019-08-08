@@ -146,7 +146,7 @@ def init_sensors(sensor_type, sensors):
         mac_regexp = "C4:7C:8D:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}"
     elif sensor_type == sensor_type_mitempbt:
         config_section = sensor_type_mitempbt
-        mac_regexp = "4C:65:A8:[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}"
+        mac_regexp = "(4C:65:A8|58:2D:34):[0-9A-F]{2}:[0-9A-F]{2}:[0-9A-F]{2}"
     else:
         print_line('Unknown device type: {}'.format(sensor_type), error=True, sd_notify=True)
         sys.exit(1)
