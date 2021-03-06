@@ -493,6 +493,14 @@ elif reporting_mode == 'homeassistant-mqtt':
             payload['unit_of_measurement'] = params['unit']
             payload['value_template'] = "{{ value_json.%s }}" % (sensor, )
             payload['name'] = "{} {}".format(mitempbt_name, sensor.title())
+            payload['device'] = {
+                    'identifiers' : ["MiTempBt{}".format(sensor['mac'].lower().replace(":", ""))],
+                    'connections' : [["mac", sensor['mac'].lower()]],
+                    'manufacturer' : 'Xiaomi',
+                    'name' : mitempbt_name,
+                    'model' : 'Mijia Temperature and Humidity Sensor (LYWSDCGQ/01ZM)',
+                    'sw_version': sensor['firmware']
+            }
             if 'device_class' in params:
                 payload['device_class'] = params['device_class']
             mqtt_client.publish('{}/{}_{}/config'.format(topic_path, mitempbt_name, sensor).lower(), json.dumps(payload), 1, True)
