@@ -493,17 +493,18 @@ elif reporting_mode == 'homeassistant-mqtt':
             payload['unit_of_measurement'] = params['unit']
             payload['value_template'] = "{{ value_json.%s }}" % (sensor, )
             payload['name'] = "{} {}".format(mitempbt_name, sensor.title())
+            payload['unique_id'] = "{}_{}_mitempbt".format(mitempbt_name, sensor.title(),params['device_class'])
             payload['device'] = {
-                    'identifiers' : ["MiTempBt{}".format(sensor['mac'].lower().replace(":", ""))],
-                    'connections' : [["mac", sensor['mac'].lower()]],
+                    'identifiers' : ["mitempbt_{}".format(mitempbt['mac'].lower().replace(":", ""))],
+                    'connections' : [["mac", mitempbt['mac'].lower()]],
                     'manufacturer' : 'Xiaomi',
                     'name' : mitempbt_name,
                     'model' : 'Mijia Temperature and Humidity Sensor (LYWSDCGQ/01ZM)',
-                    'sw_version': sensor['firmware']
+                    'sw_version': mitempbt['firmware']
             }
             if 'device_class' in params:
                 payload['device_class'] = params['device_class']
-            mqtt_client.publish('{}/{}_{}/config'.format(topic_path, mitempbt_name, sensor).lower(), json.dumps(payload), 1, True)
+            mqtt_client.publish('{}/{}/config'.format(topic_path, sensor).lower(), json.dumps(payload), 1, True)
 elif reporting_mode == 'wirenboard-mqtt':
     print_line('Announcing {}/{} devices to MQTT broker for auto-discovery ...'.format(sensor_name_miflora, sensor_name_mitempbt))
     for [flora_name, flora] in mifloras.items():
